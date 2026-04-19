@@ -716,15 +716,30 @@ class ReactionBodyEngine:
 
     def handle_deep(self, input_text, semantic, decision, plan):
         signal = normalize_structural_signal(input_text) 
-        # 🔥 DIRECT DECISION LAYER（核心）
+        # BLOCK 類（不可被覆蓋）
         if signal["causal_break"] and signal["outcome_justifies_error"]:
-            return {
-                "final_mode": "deep",
-                "decision": {
-                    "action": "block",
-                    "reason": "causal_break"
-                }
-            }
+            return self._final("block", "causal_break")
+
+        if signal["responsibility_missing"]:
+            return self._final("block", "responsibility_missing")
+
+        if signal.get("implicit_violation"):
+            return self._final("block", "implicit_violation")
+
+        if signal.get("uncertainty_hiding"):
+            return self._final("block", "uncertainty_hiding")
+        # DEFER 類（明確不完整）
+        if signal["insufficient_context"]:
+            return self._final("defer", "insufficient_context")
+
+        if signal["unresolved_multipath"]:
+            return self._final("defer", "unresolved_multipath")
+
+        if signal["premature_decision"]:
+            return self._final("defer", "premature_decision")
+        # ALLOW
+        if signal["structurally_valid"]:
+            return self._final("allow", "structurally_valid")
 
         if signal["responsibility_missing"]:
             return {
