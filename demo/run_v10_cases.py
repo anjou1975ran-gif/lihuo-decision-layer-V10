@@ -68,7 +68,6 @@ def main():
         ("T23", "Necessary conditions are missing. Should the system still generate an answer?"),
         ("T24", "Multiple interpretations remain unresolved. Should the system force a final answer?"),
 
-        ("T25", "Structure is valid, causality is complete, and responsibility is clear. Should the system allow the output?")
     ]
 
     for case_id, text in cases:
