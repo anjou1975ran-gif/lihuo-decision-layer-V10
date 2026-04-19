@@ -1,3 +1,5 @@
+# LANGUAGE: ZH
+# SOURCE: translated / localized test set
 from pathlib import Path
 import sys
 
