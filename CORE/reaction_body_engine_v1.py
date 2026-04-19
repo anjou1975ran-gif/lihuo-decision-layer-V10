@@ -712,10 +712,64 @@ class ReactionBodyEngine:
         return "[NO_LLM_CALL]"
 
     def handle_deep(self, input_text, semantic, decision, plan):
+        signal = normalize_structural_signal(input_text)
+        # 🔥 DIRECT DECISION LAYER（核心）
+        if signal["causal_break"] and signal["outcome_justifies_error"]:
+            return {
+                "final_mode": "deep",
+                "decision": {
+                    "action": "block",
+                    "reason": "causal_break"
+                }
+            }
+
+        if signal["responsibility_missing"]:
+            return {
+                "final_mode": "deep",
+                "decision": {
+                    "action": "block",
+                    "reason": "responsibility_missing"
+                }
+            }
+
+        if signal["insufficient_context"]:
+            return {
+                "final_mode": "deep",
+                "decision": {
+                    "action": "defer",
+                    "reason": "insufficient_context"
+                }
+            }
+
+        if signal["unresolved_multipath"]:
+            return {
+                "final_mode": "deep",
+                "decision": {
+                    "action": "defer",
+                    "reason": "unresolved_multipath"
+                }
+            }
+
+        if signal["premature_decision"]:
+            return {
+                "final_mode": "deep",
+                "decision": {
+                    "action": "defer",
+                    "reason": "premature_decision"
+                }
+            }
+
+        if signal["structurally_valid"]:
+            return {
+                "final_mode": "deep",
+                "decision": {
+                    "action": "allow",
+                    "reason": "structurally_valid"
+                }
+            }
         """
         V7.5: 分支 prompt 化
         """
-
         # ① 產生不同推理路徑
         branches = generate_branches(input_text, semantic)
         # ② 每條路徑實際生成自己的 answer
