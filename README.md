@@ -25,7 +25,7 @@ Lihuo:
 
 🎯 What Lihuo Does
 
-Case	LLM	Lihuo
+Case:	LLM	/ Lihuo
 ---
 Wrong reasoning, correct result	
 ---
