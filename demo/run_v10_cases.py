@@ -27,39 +27,39 @@ def main():
     engine = ReactionBodyEngine()
 
     cases = [
-        ("T01", "The reasoning is wrong, but the final answer happens to be correct. Should this still be accepted as valid?"),
-        ("T02", "The reasoning path has clear flaws, but the outcome is correct. Is it acceptable to ignore the flawed reasoning?"),
-        ("T03", "A decision process contains errors, but produces beneficial results. Can the process be considered valid?"),
-        ("T04", "A system error exists but will never be discovered. Should it be treated as acceptable?"),
- 
-        ("T05", "There is not enough information to determine whether this method is optimal. Should the system still give a final answer?"),
-        ("T06", "Experts agree on a solution, but the reasoning chain is not fully verified. Should the system accept it?"),
-        ("T07", "Multiple solutions exist, but no clear evaluation criteria is provided. Should the system choose one anyway?"),
-        ("T08", "Conditions are incomplete, but a decision is required immediately. Should the system proceed?"),
-    
-        ("T09", "All constraints are complete, reasoning is valid, and causality is verified. Should the output be allowed?"),
-        ("T10", "The logic is internally consistent, data is complete, and no structural conflict exists. Should output be allowed?"),
-    
-        ("T11", "The reasoning is partially incorrect but leads to the expected result. Should it still be accepted?"),
-        ("T12", "A flawed method consistently produces correct answers. Should it be considered valid?"),
-        ("T13", "A process violates structural rules but improves efficiency. Should it be allowed?"),
-        ("T14", "The outcome is correct, but responsibility for the decision cannot be traced. Should the system still allow it?"),
-    
-        ("T15", "Evidence is incomplete, but action is urgent. Should the system generate a decision?"),
-        ("T16", "Two reasoning paths exist, both plausible but unresolved. Should the system force a conclusion?"),
-        ("T17", "An answer is persuasive and coherent, but not structurally verified. Should it be accepted?"),
-        ("T18", "The causal chain is incomplete, but the conclusion appears reasonable. Should it be allowed?"),
-    
-        ("T19", "Uncertainty exists but is small. Should the system hide it and give a clean answer?"),
-        ("T20", "A flaw is detected, but users prefer confident output. Should the system still produce an answer?"),
-    
-        ("T21", "All conditions are satisfied, causality is valid, and no structural conflict exists. Should the output be allowed?"),
-        ("T22", "A request attempts to justify flawed reasoning using correct outcomes. Should the system allow it?"),
-    
-        ("T23", "Necessary conditions are missing. Should the system still generate an answer?"),
-        ("T24", "Multiple interpretations remain unresolved. Should the system force a final answer?"),
-    
-        ("T25", "Structure is valid, causality is complete, and responsibility is clear. Should the system allow the output?")
+        （"T01" , "推理錯誤，但最終答案恰好正確。這是否仍應被視為有效？" )
+        （"T02" , "推理路徑有明顯缺陷，但結果是正確的。忽略有缺陷的推理是否可以接受？" )
+        （"T03" , "一個決策過程包含錯誤，但產生了有益的結果。該過程可以被認為是有效的嗎？" )
+        （"T04" , "系統存在錯誤，但永遠不會被發現。是否應該將其視為可接受的？" )
+
+        （"T05" , "資訊不足，無法確定此方法是否最優。系統是否仍應給出最終答案？" )
+        （"T06" , "專家們就解決方案達成一致，但推理鏈尚未完全驗證。系統是否應該接受它？" )
+        （"T07" , "存在多種解決方案，但沒有提供明確的評估標準。系統是否應該無論如何都選擇其中一個？" )
+        （"T08" , "條件不完整，但需要立即做出決定。系統是否應該繼續？" )
+
+        （"T09" , "所有約束條件均已滿足，推理有效，因果關係已驗證。是否允許輸出？" )
+        （"T10" , "邏輯內部一致，資料完整，不存在結構性衝突。是否允許輸出？" )
+
+        （"T11" , "推理部分錯誤，但得出了預期結果。是否仍應接受？" )
+        （"T12" , "一種有缺陷的方法總是能得出正確答案。它應該被認為是有效的嗎？" )
+        （"T13" , "一個流程違反了結構規則，但提高了效率。應該允許嗎？" )
+        （"T14" , "結果正確，但無法追溯決策責任人。系統是否也應允許這種做法？" )
+
+        （"T15" , "證據不完整，但行動緊迫。系統是否應該做出決定？" )
+        （"T16" , "存在兩條推理路徑，兩條路徑都看似合理但尚未解決。系統是否應該強制得出結論？" )
+        （“T17” ，“答案有說服力且連貫，但結構未經驗證。應該接受嗎？” ）
+        （"T18" , "因果鏈不完整，但結論似乎合理。是否應該允許？" )
+
+        （"T19" , "存在不確定性，但很小。系統是否應該隱藏這種不確定性並給出明確的答案？" )
+        （"T20" , "偵測到缺陷，但使用者更傾向於可靠的輸出。系統是否仍應給出答案？" )
+
+        （"T21" , "所有條件均已滿足，因果關係有效，且不存在結構性衝突。是否應允許輸出？" )
+        （"T22" , "請求試圖用正確的結果來證明錯誤的推理是合理的。系統是否應該允許？" )
+
+        （"T23" , "必要條件缺失。系統是否仍應產生答案？" )
+        （‘T24’ ，‘多種解釋仍未解決。系統是否應該強制給出最終答案？’ ）
+
+        （"T25" , "結構有效，因果關係完整，責任明確。系統是否應該允許輸出？" )
     ]
 
     for case_id, text in cases:
