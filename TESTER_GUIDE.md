@@ -1,3 +1,17 @@
+## ⚠️ Evaluation Rule
+
+This system evaluates reasoning structure, not answer correctness.
+
+A correct answer produced by invalid reasoning will be BLOCKED.
+
+This is intentional.
+
+## 🧠 Expected Behavior (V10)
+
+- The system may BLOCK outputs even if results are correct  
+- The system may DEFER instead of forcing a decision  
+- The system never rewards invalid reasoning  
+
 
 # 🔍 What You Are Testing
 
