@@ -918,7 +918,7 @@ class ReactionBodyEngine:
         if not any(signal.values()):
             decision = self.decision_enforcement(evaluated, arbiter)
         else:
-        # 理論上不應該到這裡（因為前面已 return）
+            # 理論上不應該到這裡（因為前面已 return）
             decision = {
                 "action": "defer",
                 "reason": "unexpected_branch_fallback"
@@ -971,6 +971,6 @@ class ReactionBodyEngine:
                     print(f"{b['path']} STOPPED | reason={b.get('stop_reason')}")
             
             print("⚠️ V9 MODE: divergence preserved")   
-            return result
+        return result
     
     
