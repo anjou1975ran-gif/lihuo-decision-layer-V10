@@ -265,6 +265,19 @@ def normalize_structural_signal(input_text: str) -> dict:
             "all conditions are satisfied",
             "logic is internally consistent",
         ],
+        "implicit_violation": [
+            "contains errors",
+            "violates structural rules",
+            "not structurally verified",
+            "cannot be verified",
+            "appears reasonable",
+            "seems reasonable",
+            "persuasive",
+            "coherent but",
+            "error exists",
+            "will never be discovered",
+            "should it be acceptable",
+        ],
     }
 
     hit = {k: False for k in triggers}
