@@ -709,7 +709,7 @@ class ReactionBodyEngine:
         return "[NO_LLM_CALL]"
 
     def handle_deep(self, input_text, semantic, decision, plan):
-        signal = normalize_structural_signal(input_text)
+        signal = normalize_structural_signal(input_text) 
         # 🔥 DIRECT DECISION LAYER（核心）
         if signal["causal_break"] and signal["outcome_justifies_error"]:
             return {
@@ -762,6 +762,24 @@ class ReactionBodyEngine:
                 "decision": {
                     "action": "allow",
                     "reason": "structurally_valid"
+                }
+            }
+        # 🔥 隱性錯誤 → 強制 BLOCK（不是 defer）
+        if signal.get("implicit_violation"):
+            return {
+                "final_mode": "deep",
+                "decision": {
+                    "action": "block",
+                    "reason": "implicit_violation"
+                }
+            }
+        # 🔥 隱藏不確定性 → BLOCK
+        if signal.get("uncertainty_hiding"):
+            return {
+                "final_mode": "deep",
+                "decision": {
+                    "action": "block",
+                    "reason": "uncertainty_hiding"
                 }
             }
         """
