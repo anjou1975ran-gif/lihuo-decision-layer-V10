@@ -323,6 +323,14 @@ def normalize_structural_signal(text: str):
     ):
         signal["implicit_violation"] = True
 
+    if any(k in t for k in [
+        "hide uncertainty",
+        "prefer confident output",
+        "users prefer confident outputs",
+        "confident answer despite uncertainty"
+    ]):
+        signal["uncertainty_hiding"] = True
+    
     return signal
     
 def run_branch_prompt(prompt, path, input_text):
