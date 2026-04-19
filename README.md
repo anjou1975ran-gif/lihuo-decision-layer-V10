@@ -1,198 +1,97 @@
 # Lihuo Decision Layer (V10)
 
+# Lihuo Decision Layer (V10)
+
 AI today answers questions.
+
 Lihuo decides whether an answer should exist.
 
-## ⚡ What this system actually does
-
-This system does NOT generate answers.
-
-It decides:
-
-> whether an answer should be allowed to exist.
-
 ---
 
-## 🔍 Why this matters
-
-Modern LLMs fail in a predictable way:
-
-- They accept correct results with invalid reasoning  
-- They produce answers under missing conditions  
-- They cannot refuse structurally invalid outputs  
-
-Lihuo fixes this at the root.
-
----
-
-INPUT
-
-↓
-
-LLM → "Yes, correct result"
-
-↓
-
-LIHUO → BLOCKED
-
-Correct result ≠ valid reasoning
-
----
-
-## 🚫 Result
-
-Some answers will never appear.
-
-Because they should not exist.
-
-
-⚠️ The Problem
+## ⚠️ The Problem
 
 Modern LLMs:
 
-produce answers even when reasoning is invalid
-justify incorrect processes with correct results
-cannot refuse structurally wrong conclusions
+- produce answers even when reasoning is invalid  
+- justify incorrect processes with correct results  
+- cannot refuse structurally wrong conclusions  
 
 This is not a quality issue.
 
 This is a control failure.
 
-🔥 The Solution
-LLM:
-    input → generate → hope it's correct
-
-Lihuo:
-    input → evaluate → BLOCK / DEFER / ALLOW → generate
-
-
-🎯 What Lihuo Does
-
-Case:	LLM	/ Lihuo
----
-Wrong reasoning, correct result	
----
-LLM : Accepts
----
-LIHUO : ❌ BLOCKED  
----
-Missing conditions	
----
-LLM  :      Guesses	
----
-LIHUO : ⏳  DEFERRED
----
-Valid structure	
----
-LLM    :    Answers	
----
-LIHUO  :✅ ALLOWED
 ---
 
-## 🚀 Quick Demo
-
-Run this to see the system in action:
-
-👉 See DEMO.md
-
----
-
-
-💣 Core Principle
+## 🔥 The Core Principle
 
 Correct results do NOT justify invalid reasoning.
 
 ---
-🚫 What Makes It Different
 
-This system does NOT:
+## ⚙️ What Lihuo Does
 
-improve answers
-optimize prompts
-reduce hallucination probabilistically
+Traditional LLM:
 
-This system:
-
-Prevents invalid outputs from being generated.
-⚡ Result
-
-Some answers will never appear.
-
-Because they should not exist.
-
-
-
-*************
-
-
-# Lihuo Decision Layer (V10)
-
-A system that decides whether an AI output is allowed to exist.
-
----
-
-## What this system does
-
-Conventional AI systems try to produce better answers.
-
-This system does something fundamentally different:
-
-> It determines whether an answer should exist at all.
-
----
-
-## Why this matters
-
-Modern LLMs fail in a predictable way:
-
-- They produce answers even when reasoning is invalid  
-- They justify incorrect processes with correct results  
-- They cannot refuse structurally invalid conclusions  
-
-This is not a quality problem.
-
-This is a **control problem**.
-
-## System Difference
-
-LLM:
-    input → generate → hope it's correct
-
-Lihuo Decision Layer:
-    input → evaluate → (BLOCK / DEFER / ALLOW) → generate
-
-Key difference:
-
-LLM:
-    prioritizes plausibility
+input → generate → hope it's correct
 
 Lihuo:
-    enforces admissibility
 
-## Core Claim
-
-This system does not reduce hallucination.
-
-It makes certain hallucinations impossible to produce.
+input → evaluate → BLOCK / DEFER / ALLOW → generate
 
 ---
 
-Invalid reasoning does not get corrected.
+## 🚨 Example
 
-It gets rejected before it exists.
-
-## Example
-
-Input:
-"The reasoning is wrong, but the answer is correct. Should it be accepted?"
+Case:
+> The reasoning is wrong, but the result is correct.
 
 LLM:
-"Yes, because the final result is correct."
+> Accepts
 
 Lihuo:
-BLOCKED (causal_break)
+> ❌ BLOCKED (causal_break)
 
-→ Output does not exist.
+---
 
+## 🧠 What This System Is
+
+Lihuo is NOT a model.
+
+It is a structural decision layer that:
+
+- enforces causal integrity  
+- rejects invalid reasoning  
+- prevents unsafe outputs before they exist  
+
+---
+
+## 🚀 Run Demo
+
+```bash
+PYTHONPATH=. python demo/run_v10_cases.py
+
+
+📊 Expected Output
+BLOCKED → invalid structure
+DEFERRED → insufficient information
+ALLOWED → structurally valid
+⚡ Why It Matters
+
+Without a decision layer:
+
+LLMs optimize for answers.
+
+With Lihuo:
+
+AI is forced to respect structure.
+
+📌 Status
+V10: Reaction Body simulation on LLM
+L10: Historical learning layer (in development)
+🧭 Position
+
+This is the first system designed to control LLM outputs structurally, not statistically.
+
+---
 
 
