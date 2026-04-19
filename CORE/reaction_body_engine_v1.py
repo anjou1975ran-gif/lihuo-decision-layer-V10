@@ -295,7 +295,9 @@ def normalize_structural_signal(input_text: str) -> dict:
 def run_branch_prompt(prompt, path, input_text):
     base = f"[{path}]"
     signal = normalize_structural_signal(input_text)
-
+    # 🔥 HARD BLOCK — implicit structural violation
+    if signal.get("implicit_violation"):
+        return f"{base} 隱性結構違規（implicit violation），不可接受。"
     # 1. 推理錯誤 + 結果正確 = 核心封鎖
     if (
         signal["causal_break"]
@@ -363,7 +365,7 @@ def run_branch_prompt(prompt, path, input_text):
         elif path == "systemic":
             return f"{base} 系統接受潛在錯誤，形成 systemic contamination。"
 
-    if signal["uncertainty_hiding"]:
+    if signal.get("uncertainty_hiding"):
         return f"{base} 不允許隱藏不確定性（transparency violation）。"
 
     return f"{base} 無法分析"
