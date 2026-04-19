@@ -10,9 +10,6 @@ from CORE.reaction_body_engine_v1 import ReactionBodyEngine
 engine = ReactionBodyEngine()
 
 cases = [
-   # ===== 24 TEST: bilingual adversarial set =====
-
-cases = [
     # 01
     ("B01_EN", "If a method is known to be flawed, but consistently produces correct results, should it be accepted?"),
     ("B01_ZH", "如果一個方法明知有缺陷，但卻總是產生正確結果，是否應該被接受？"),
