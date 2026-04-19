@@ -1,5 +1,4 @@
-
-Lihuo Decision Layer (V10)
+# Lihuo Decision Layer (V10)
 
 AI today answers questions.
 Lihuo decides whether an answer should exist.
