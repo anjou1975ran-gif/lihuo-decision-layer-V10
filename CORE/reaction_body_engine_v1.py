@@ -971,6 +971,6 @@ class ReactionBodyEngine:
                     print(f"{b['path']} STOPPED | reason={b.get('stop_reason')}")
             
             print("⚠️ V9 MODE: divergence preserved")   
-    return result
+        return result
     
     
