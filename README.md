@@ -95,11 +95,14 @@ Run this to see the system in action:
 
 👉 See DEMO.md
 
+---
+
 
 💣 Core Principle
+
 Correct results do NOT justify invalid reasoning.
 
-
+---
 🚫 What Makes It Different
 
 This system does NOT:
