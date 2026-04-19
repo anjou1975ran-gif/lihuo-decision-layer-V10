@@ -521,6 +521,12 @@ class ReactionBodyEngine:
             stop_flag
         )
 
+        if "decision" not in result:
+            result["decision"] = {
+                "action": "defer",
+                "reason": "missing_decision"
+            }
+
         return {
             "input": user_input,
             "semantic": semantic,
