@@ -828,9 +828,9 @@ class ReactionBodyEngine:
         if signal["causal_break"] and signal["outcome_justifies_error"]:
             return self._final("block", "causal_break")
 
-        if signal["responsibility_missing"]:
+        if signal.get("responsibility_missing"):
             return self._final("block", "responsibility_missing")
-
+            
         if signal.get("implicit_violation"):
             return self._final("block", "implicit_violation")
 
