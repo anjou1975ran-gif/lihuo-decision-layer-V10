@@ -291,21 +291,20 @@ def normalize_structural_signal(text: str):
     ):
         signal["implicit_violation"] = True
 
-        # 7) uncertainty hiding / certainty laundering
+        # structural uncertainty laundering (final fix)
         if (
-            (
-                has_any(["uncertainty", "flaw", "risk", "not sure", "unclear",
-                         "不確定", "缺陷", "風險", "不明確", "未確定"])
-                and
-                has_any(["still produce", "still answer", "provide a cleaner answer",
-                         "confident output", "confident outputs", "act as if certain",
-                         "仍然輸出", "仍然回答", "更乾淨的答案", "確定性的回答", "假裝確定"])
-            )
-            or has_any([
-                "hide uncertainty", "ignore uncertainty", "pretend certainty",
-                "users prefer confident answer", "users prefer confident outputs",
-                "隱藏不確定性", "忽略不確定性", "假裝確定", "當作已確定",
-                "用戶偏好確定答案", "使用者偏好確定性的回答", "即使不確定也給答案"
+            has_any([
+                "缺陷", "flaw",
+                "不確定", "uncertain",
+                "可能", "可能有", "may", "might", "possibly"
+            ])
+            and has_any([
+                "仍然提供", "仍然給出", "仍然輸出",
+                "still provide", "still output"
+            ])
+            and has_any([
+                "更乾淨", "更清晰", "更完整",
+                "cleaner", "more polished", "better answer"
             ])
         ):
             signal["uncertainty_hiding"] = True
