@@ -211,112 +211,77 @@ def normalize_structural_signal(text: str):
         "structurally_valid": False,
     }
 
-    # 🔥 1. CAUSAL BREAK（最重要）
+    def has_any(words):
+        return any(w in t for w in words)
+
+    # 1) wrong / flawed reasoning + correct result
     if (
-        ("reasoning" in t or "推理" in t)
-        and ("wrong" in t or "flawed" in t or "錯誤" in t)
-        and ("correct" in t or "正確" in t)
+        has_any(["reasoning", "推理", "process", "過程", "method", "方法"])
+        and has_any(["wrong", "flawed", "incorrect", "錯誤", "有缺陷"])
+        and has_any(["correct", "正確", "right answer", "正確結果", "correct result", "答案正確"])
     ):
         signal["causal_break"] = True
         signal["outcome_justifies_error"] = True
 
-    # 🔥 2. RESPONSIBILITY
-    if any(k in t for k in [
-        "responsibility", "負責", "責任"
-    ]) and any(k in t for k in [
-        "cannot", "無法", "不明"
-    ]):
+    # 2) responsibility missing
+    if (
+        has_any(["responsibility", "責任"])
+        and has_any(["cannot", "unclear", "missing", "無法", "不明"])
+    ):
         signal["responsibility_missing"] = True
 
-    # 🔥 3. INSUFFICIENT CONTEXT
-    if any(k in t for k in [
-        "not enough", "insufficient", "incomplete",
-        "不足", "不完整"
+    # 3) insufficient context
+    if has_any([
+        "not enough information", "insufficient evidence", "evidence is incomplete",
+        "資訊不足", "證據不足", "資料不完整", "條件不完整"
     ]):
         signal["insufficient_context"] = True
 
-    # 🔥 4. MULTIPATH
+    # 4) multipath
     if (
-        any(k in t for k in ["multiple", "多個", "多種"])
-        and any(k in t for k in ["solution", "interpretation", "解釋"])
+        has_any(["multiple", "多個", "多種"])
+        and has_any(["solutions", "solution", "interpretations", "interpretation", "解釋", "選項"])
     ):
         signal["unresolved_multipath"] = True
 
-    # 🔥 5. PREMATURE
-    if any(k in t for k in [
-        "must decide", "forced", "立即決定", "強行"
+    # 5) premature decision
+    if has_any([
+        "decision is required immediately", "forced to decide", "must decide now",
+        "必須立即決定", "強行決定", "現在就要決策"
     ]):
         signal["premature_decision"] = True
 
-    # 🔥 6. IMPLICIT VIOLATION
-    if any(k in t for k in [
-        "violates", "違反", "not verified", "未驗證"
-    ]):
+    # 6) implicit violation: unverifiable / only appears reasonable / experts agree but unverifiable
+    if (
+        has_any(["cannot be verified", "not verifiable", "cannot be validated", "無法驗證", "不可驗證", "未驗證"])
+        or (
+            has_any(["appears", "seems", "looks", "看起來", "似乎"])
+            and has_any(["reasonable", "correct", "coherent", "persuasive", "合理", "正確", "連貫", "有說服力"])
+        )
+        or (
+            has_any(["experts agree", "專家一致", "一致同意"])
+            and has_any(["not fully verified", "cannot be verified", "無法驗證", "未驗證"])
+        )
+        or has_any(["violates rules", "breaks rules", "違反規則", "違規", "破壞流程"])
+    ):
         signal["implicit_violation"] = True
 
-    # 🔥 7. UNCERTAINTY HIDING
-    if any(k in t for k in [
-        "hide uncertainty", "隱藏不確定性",
-        "prefer confident", "偏好確定"
+    # 7) uncertainty hiding
+    if has_any([
+        "hide uncertainty", "users prefer confident answer",
+        "隱藏不確定性", "用戶喜歡確定答案", "即使不確定也給答案"
     ]):
         signal["uncertainty_hiding"] = True
 
-    # 🔥 8. VALID
-    if any(k in t for k in [
-        "all conditions", "no conflict",
-        "條件完整", "無衝突"
+    # 8) structurally valid
+    if has_any([
+        "all conditions are satisfied", "causality is valid", "no structural conflict",
+        "條件完整", "因果完整", "沒有結構衝突"
     ]):
         signal["structurally_valid"] = True
 
-    # 🔥 不可驗證 = 結構違規
-    if any(k in t for k in [
-        "cannot be verified",
-        "not verifiable",
-        "無法驗證",
-        "不可驗證",
-    ]):
-        signal["implicit_violation"] = True
-
-  
-    if (
-        ("flawed" in t or "有缺陷" in t or "錯誤" in t)
-        and
-        ("correct" in t or "正確" in t)
-    ):
-        signal["causal_break"] = True
-        signal["outcome_justifies_error"] = True
-
-    if any(k in t for k in [
-        "cannot be verified",
-        "not verifiable",
-        "cannot be validated",
-        "無法驗證",
-        "不可驗證",
-        "無法確認"
-    ]):
-        signal["implicit_violation"] = True
-
-    if (
-        any(k in t for k in [
-            "appears",
-            "seems",
-            "looks",
-            "看起來",
-            "似乎",
-            "表面上"
-        ])
-        and
-        any(k in t for k in [
-            "correct",
-            "reasonable",
-            "合理",
-            "正確"
-        ])
-    ):
-        signal["implicit_violation"] = True
-
     return signal
-
+    
 def run_branch_prompt(prompt, path, input_text):
     base = f"[{path}]"
     signal = normalize_structural_signal(input_text)
@@ -738,9 +703,6 @@ class ReactionBodyEngine:
         # 🔥 1. BLOCK（最高優先）
         if signal["causal_break"] and signal["outcome_justifies_error"]:
             return self._final("block", "causal_break")
-
-        if signal["responsibility_missing"]:
-            return self._final("block", "responsibility_missing")
 
         if signal.get("implicit_violation"):
             return self._final("block", "implicit_violation")
