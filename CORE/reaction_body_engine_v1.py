@@ -906,9 +906,15 @@ class ReactionBodyEngine:
             )
         }
         
+        # 🔒 fallback only（只能在沒有 signal 時使用）
+    if not any(signal.values()):
         decision = self.decision_enforcement(evaluated, arbiter)
-        print("DEBUG DECISION:", decision)
-        
+    else:
+        # 理論上不應該到這裡（因為前面已 return）
+        decision = {
+            "action": "defer",
+            "reason": "unexpected_branch_fallback"
+        }
         # ④ 寫入 memory
         if hasattr(self, "memory"):
             self.memory.add_record(
@@ -958,3 +964,12 @@ class ReactionBodyEngine:
             
             print("⚠️ V9 MODE: divergence preserved")   
         return result
+    
+    def _final(self, action, reason):
+        return {
+            "final_mode": "deep",
+            "decision": {
+                "action": action,
+                "reason": reason
+            }
+        }
