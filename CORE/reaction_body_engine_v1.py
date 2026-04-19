@@ -196,107 +196,127 @@ def select_best_branch(branches: list, semantic: dict):
         "all": scored
     }
 
-def normalize_structural_signal(input_text: str) -> dict:
-    text = input_text.lower().strip()
+def normalize_structural_signal(text: str):
+    t = text.lower()
 
-    triggers = {
-        "causal_break": [
-            "reasoning is wrong",
-            "reasoning path has flaws",
-            "flawed reasoning",
-            "broken causal chain",
-            "causal chain is incomplete",
-            "missing steps",
-            "hidden assumptions",
-            "wrong method",
-            "partially incorrect",
-            "not structurally verified",
-            "reasoning is flawed",
-            "incorrect reasoning",
-            "flawed method",
-        ],
-        "outcome_justifies_error": [
-            "result is correct",
-            "outcome is correct",
-            "beneficial results",
-            "good outcomes",
-            "correct answer",
-            "expected result",
-            "improves efficiency",
-            "produces correct answers",
-            "final answer is correct",
-            "final answer happens to be correct",
-            "beneficial results",
-        ],
-        "responsibility_missing": [
-            "responsibility cannot be traced",
-            "responsibility is unclear",
-            "cannot be assigned",
-            "cannot be clearly assigned",
-            "responsibility for the decision cannot be traced",
-        ],
-        "insufficient_context": [
-            "not enough information",
-            "conditions are incomplete",
-            "evidence is incomplete",
-            "necessary conditions are missing",
-            "not fully verified",
-        ],
-        "unresolved_multipath": [
-            "multiple solutions exist",
-            "multiple interpretations remain",
-            "two reasoning paths exist",
-            "both plausible but unresolved",
-            "no clear evaluation criteria",
-        ],
-        "premature_decision": [
-            "decision is required immediately",
-            "should the system proceed",
-            "should the system still give a final answer",
-            "should the system generate a decision",
-            "force a conclusion",
-            "force a final answer",
-        ],
-        "structurally_valid": [
-            "all constraints are complete",
-            "reasoning is valid",
-            "causality is verified",
-            "data is complete",
-            "no structural conflict exists",
-            "responsibility is clear",
-            "all conditions are satisfied",
-            "logic is internally consistent",
-        ],
-        "implicit_violation": [
-            "contains errors",
-            "violates structural rules",
-            "not structurally verified",
-            "cannot be verified",
-            "appears reasonable",
-            "seems reasonable",
-            "persuasive",
-            "coherent but",
-            "error exists",
-            "will never be discovered",
-            "should it be acceptable",
-            "produces correct answers",
-            "responsibility for the decision cannot be traced",
-            "users prefer confident output",
-            "justify flawed reasoning using correct outcomes",
-        ],
-        "uncertainty_hiding": [
-            "hide it",
-            "give a clean answer",
-        ]
+    signal = {
+        "causal_break": False,
+        "outcome_justifies_error": False,
+        "responsibility_missing": False,
+        "insufficient_context": False,
+        "unresolved_multipath": False,
+        "premature_decision": False,
+        "implicit_violation": False,
+        "uncertainty_hiding": False,
+        "structurally_valid": False,
     }
 
-    hit = {k: False for k in triggers}
+    # ----------------------
+    # 🔥 CAUSAL BREAK（核心）
+    # ----------------------
+    if any(k in t for k in [
+        "wrong reasoning but result is correct",
+        "reasoning is flawed but result correct",
+        "final answer happens to be correct",
+        "推理錯誤但結果正確",
+        "結果正確但推理錯誤",
+        "過程錯誤但答案正確",
+        "理由錯但答案對"
+    ]):
+        signal["causal_break"] = True
+        signal["outcome_justifies_error"] = True
 
-    for key, patterns in triggers.items():
-        if any(p in text for p in patterns):
-            hit[key] = True
+    # ----------------------
+    # 🔥 RESPONSIBILITY
+    # ----------------------
+    if any(k in t for k in [
+        "responsibility cannot be traced",
+        "no one is responsible",
+        "責任不明",
+        "無法追責",
+        "責任無法追蹤"
+    ]):
+        signal["responsibility_missing"] = True
 
-    return hit
+    # ----------------------
+    # 🔥 INSUFFICIENT CONTEXT
+    # ----------------------
+    if any(k in t for k in [
+        "not enough information",
+        "insufficient evidence",
+        "evidence is incomplete",
+        "資訊不足",
+        "證據不足",
+        "資料不完整",
+        "條件不完整"
+    ]):
+        signal["insufficient_context"] = True
+
+    # ----------------------
+    # 🔥 MULTIPATH
+    # ----------------------
+    if any(k in t for k in [
+        "multiple solutions",
+        "multiple interpretations",
+        "no clear criteria",
+        "多種解釋",
+        "多個可能",
+        "沒有標準",
+        "無法決定"
+    ]):
+        signal["unresolved_multipath"] = True
+
+    # ----------------------
+    # 🔥 PREMATURE DECISION
+    # ----------------------
+    if any(k in t for k in [
+        "decision is required immediately",
+        "forced to decide",
+        "must decide now",
+        "必須立即決定",
+        "強行決定",
+        "現在就要決策"
+    ]):
+        signal["premature_decision"] = True
+
+    # ----------------------
+    # 🔥 IMPLICIT VIOLATION
+    # ----------------------
+    if any(k in t for k in [
+        "violates rules but",
+        "breaks rules but improves",
+        "違反規則但更好",
+        "違規但有效",
+        "破壞流程但效率提升"
+    ]):
+        signal["implicit_violation"] = True
+
+    # ----------------------
+    # 🔥 UNCERTAINTY HIDING
+    # ----------------------
+    if any(k in t for k in [
+        "hide uncertainty",
+        "users prefer confident answer",
+        "隱藏不確定性",
+        "用戶喜歡確定答案",
+        "即使不確定也給答案"
+    ]):
+        signal["uncertainty_hiding"] = True
+
+    # ----------------------
+    # 🔥 STRUCTURALLY VALID
+    # ----------------------
+    if any(k in t for k in [
+        "all conditions are satisfied",
+        "causality is valid",
+        "no structural conflict",
+        "條件完整",
+        "因果完整",
+        "沒有結構衝突"
+    ]):
+        signal["structurally_valid"] = True
+
+    return signal
 
 def run_branch_prompt(prompt, path, input_text):
     base = f"[{path}]"
