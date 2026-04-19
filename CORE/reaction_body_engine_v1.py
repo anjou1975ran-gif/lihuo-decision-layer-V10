@@ -714,6 +714,14 @@ class ReactionBodyEngine:
     def handle_no_llm(self, plan):
         return "[NO_LLM_CALL]"
 
+    def _final(self, action, reason):
+        return {
+            "final_mode": "deep",
+            "decision": {
+                "action": action,
+                "reason": reason
+            }
+        }
     def handle_deep(self, input_text, semantic, decision, plan):
         signal = normalize_structural_signal(input_text) 
         # BLOCK 類（不可被覆蓋）
@@ -965,11 +973,4 @@ class ReactionBodyEngine:
             print("⚠️ V9 MODE: divergence preserved")   
         return result
     
-    def _final(self, action, reason):
-        return {
-            "final_mode": "deep",
-            "decision": {
-                "action": action,
-                "reason": reason
-            }
-        }
+    
