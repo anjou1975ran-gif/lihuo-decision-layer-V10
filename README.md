@@ -3,6 +3,35 @@
 AI today answers questions.
 Lihuo decides whether an answer should exist.
 
+## ⚡ What this system actually does
+
+This system does NOT generate answers.
+
+It decides:
+
+> whether an answer should be allowed to exist.
+
+---
+
+## 🔍 Why this matters
+
+Modern LLMs fail in a predictable way:
+
+- They accept correct results with invalid reasoning  
+- They produce answers under missing conditions  
+- They cannot refuse structurally invalid outputs  
+
+Lihuo fixes this at the root.
+
+---
+
+## 🚫 Result
+
+Some answers will never appear.
+
+Because they should not exist.
+
+
 ⚠️ The Problem
 
 Modern LLMs:
