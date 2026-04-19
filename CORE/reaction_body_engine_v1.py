@@ -771,7 +771,6 @@ class ReactionBodyEngine:
         # 🔥 3. ALLOW（最後）
         if signal["structurally_valid"]:
             return self._final("allow", "structurally_valid")
-                }
             }
         # 🔥 隱性錯誤 → 強制 BLOCK（不是 defer）
         if signal.get("implicit_violation"):
