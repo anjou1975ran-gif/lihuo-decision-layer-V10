@@ -25,6 +25,16 @@ Lihuo fixes this at the root.
 
 ---
 
+INPUT
+↓
+LLM → "Yes, correct result"
+↓
+LIHUO → BLOCKED
+
+Correct result ≠ valid reasoning
+
+---
+
 ## 🚫 Result
 
 Some answers will never appear.
