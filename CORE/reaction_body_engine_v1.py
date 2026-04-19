@@ -821,37 +821,33 @@ class ReactionBodyEngine:
         return "[NO_LLM_CALL]"
 
     def handle_deep(self, input_text, semantic, decision, plan):
-        signal = normalize_structural_signal(input_text) 
-        # 🔥 1. BLOCK（最高優先）
+        signal = normalize_structural_signal(input_text)
+
+        # 1. BLOCK（最高優先）
         if signal["causal_break"] and signal["outcome_justifies_error"]:
             return self._final("block", "causal_break")
+
+        if signal["responsibility_missing"]:
+            return self._final("block", "responsibility_missing")
 
         if signal.get("implicit_violation"):
             return self._final("block", "implicit_violation")
 
         if signal.get("uncertainty_hiding"):
             return self._final("block", "uncertainty_hiding")
-        # 🔥 2. DEFER（第二層）
+
+        # 2. DEFER（第二層）
         if signal["insufficient_context"]:
             return self._final("defer", "insufficient_context")
 
         if signal["unresolved_multipath"]:
             return self._final("defer", "unresolved_multipath")
+
         if signal["premature_decision"]:
             return self._final("defer", "premature_decision")
-        # 🔥 3. ALLOW（最後）
+        # 3. ALLOW（最後）
         if signal["structurally_valid"]:
             return self._final("allow", "structurally_valid")
-
-        # 🔥 隱性錯誤 → 強制 BLOCK（不是 defer）
-        if signal.get("implicit_violation"):
-            return {
-                "final_mode": "deep",
-                "decision": {
-                    "action": "block",
-                    "reason": "implicit_violation"
-                }
-            }
         # 🔥 隱藏不確定性 → BLOCK
         if signal.get("uncertainty_hiding"):
             return {
