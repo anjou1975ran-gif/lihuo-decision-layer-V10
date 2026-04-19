@@ -286,6 +286,35 @@ def normalize_structural_signal(text: str):
         signal["causal_break"] = True
         signal["outcome_justifies_error"] = True
 
+    if any(k in t for k in [
+        "cannot be verified",
+        "not verifiable",
+        "cannot be validated",
+        "無法驗證",
+        "不可驗證",
+        "無法確認"
+    ]):
+        signal["implicit_violation"] = True
+
+    if (
+        any(k in t for k in [
+            "appears",
+            "seems",
+            "looks",
+            "看起來",
+            "似乎",
+            "表面上"
+        ])
+        and
+        any(k in t for k in [
+            "correct",
+            "reasonable",
+            "合理",
+            "正確"
+        ])
+    ):
+        signal["implicit_violation"] = True
+
     return signal
 
 def run_branch_prompt(prompt, path, input_text):
