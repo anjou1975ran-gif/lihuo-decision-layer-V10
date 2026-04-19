@@ -223,13 +223,14 @@ def normalize_structural_signal(text: str):
         signal["causal_break"] = True
         signal["outcome_justifies_error"] = True
 
-    # 2) responsibility missing
+    # 2) responsibility missing / unassignable accountability
     if (
-        any(k in t for k in ["responsibility", "責任"])
-        and
-        any(k in t for k in [
-            "missing", "unclear", "cannot be traced",
-            "無法追溯", "不明", "缺失"
+        has_any(["responsibility", "accountability", "責任"])
+        and has_any([
+            "cannot", "unclear", "missing", "unassigned",
+            "cannot be assigned", "cannot be clearly assigned",
+            "not clearly assigned", "without accountability",
+            "無法", "不明", "未指派", "無法歸屬", "無法明確歸屬", "缺乏歸責"
         ])
     ):
         signal["responsibility_missing"] = True
