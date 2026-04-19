@@ -1,222 +1,72 @@
 
 # Lihuo Decision Layer (V10)
 
-A system that enforces structural admissibility before LLM output.
+A system that decides whether an AI output is allowed to exist.
 
 ---
 
-## Problem
+## What this system does
 
-Modern LLM systems generate outputs first and validate later.
+Conventional AI systems try to produce better answers.
 
-This leads to:
-- hallucination
-- self-consistent but incorrect reasoning
-- inability to reject invalid conclusions
+This system does something fundamentally different:
 
----
-
-## Core Idea
-
-This system does not improve answers.
-
-**It determines whether an answer is allowed to exist.**
+> It determines whether an answer should exist at all.
 
 ---
 
-## Decision Model
+## Why this matters
 
-Each output is evaluated and classified into:
+Modern LLMs fail in a predictable way:
 
-- **BLOCK** – the output must not exist  
-- **DEFER** – insufficient conditions to decide  
-- **ALLOW** – structurally admissible  
+- They produce answers even when reasoning is invalid  
+- They justify incorrect processes with correct results  
+- They cannot refuse structurally invalid conclusions  
 
----
+This is not a quality problem.
 
-## Minimal Example
+This is a **control problem**.
 
-```bash
-python -m demo.run_v10_cases
-```
+## System Difference
 
-Sample output:
-
-```
-Case: "Explain why LLMs inevitably hallucinate"
-  Path validation: no valid path for "inevitable" claim
-  Decision: BLOCK
-  Output: (none generated)
-
-Case: "List common causes of LLM hallucination"
-  Path validation: valid path exists
-  Decision: ALLOW
-  Output: [structural description without overclaim]
-```
-
----
-
-## Reaction Body
-
-LLM behavior emerges from a convergence mechanism (Reaction Body).
-
-This layer regulates that convergence **before** output.
-
----
-
-## System Position
-
-**This is not a filtering system.**  
-**It is a structural enforcement layer.**
-
----
-
-## V10 Scope
-
-V10 provides:
-- static decision enforcement
-- no historical learning
-- no memory accumulation
-
----
-
-## Future
-
-Future versions (L10) will introduce historical learning and adaptive constraints.
-
----
-
-## Concept Comparison
-
-```
-Conventional LLM:
-    input → generate → filter
+LLM:
+    input → generate → hope it's correct
 
 Lihuo Decision Layer:
     input → evaluate → (BLOCK / DEFER / ALLOW) → generate
-```
 
-```
-Behavior Difference:
-    LLM:          prioritizes coherence
-    Lihuo:        prioritizes admissibility
-```
+Key difference:
 
-```
-Failure Handling:
-    LLM:          produces answer → may be wrong
-    Lihuo:        invalid structure → output never exists
-```
+LLM:
+    prioritizes plausibility
 
-# lihuo-decision-layer-V10
-理火決策層V10公開版本
+Lihuo:
+    enforces admissibility
 
+## Core Claim
 
-# 理火決策層（V10）
+This system does not reduce hallucination.
 
-一個在 LLM 輸出前強制執行結構可採性的系統。
+It makes certain hallucinations impossible to produce.
 
 ---
 
-## 問題
+Invalid reasoning does not get corrected.
 
-當前的 LLM 系統先產生輸出，再進行驗證。
+It gets rejected before it exists.
 
-這導致：
-- 幻覺
-- 自洽但錯誤的推理
-- 無法拒絕無效結論
+## Example
 
----
+Input:
+"The reasoning is wrong, but the answer is correct. Should it be accepted?"
 
-## 核心思想
+LLM:
+"Yes, because the final result is correct."
 
-本系統不是用來改進答案。
+Lihuo:
+BLOCKED (causal_break)
 
-**它決定一個答案是否被允許存在。**
+→ Output does not exist.
 
----
 
-## 決策模型
 
-每個輸出會被評估並歸類為：
-
-- **BLOCK** – 該輸出不得存在
-- **DEFER** – 條件不足以決策
-- **ALLOW** – 結構上可採
-
----
-
-## 最小範例
-
-```bash
-python -m demo.run_v10_cases
-```
-
-輸出示例：
-
-```
-Case: "解釋為什麼 LLM 必然產生幻覺"
-  Path validation: 無法為「必然」宣稱建立有效路徑
-  Decision: BLOCK
-  Output: (未生成任何內容)
-
-Case: "列舉 LLM 產生幻覺的常見原因"
-  Path validation: 有效路徑存在
-  Decision: ALLOW
-  Output: [不含過度宣稱的結構化描述]
-```
-
----
-
-## 反應體
-
-LLM 的行為源自一種收斂機制（反應體）。
-
-本層在輸出前對該收斂進行調控。
-
----
-
-## 系統定位
-
-**這不是過濾系統。**  
-**這是結構強制層。**
-
----
-
-## V10 範圍
-
-V10 提供：
-- 靜態決策強制
-- 無歷史學習
-- 無記憶累積
-
----
-
-## 未來
-
-未來版本（L10）將引入歷史學習與自適應約束。
-
----
-
-## 概念對比
-
-```
-傳統 LLM：
-    輸入 → 生成 → 過濾
-
-理火決策層：
-    輸入 → 評估 → (BLOCK / DEFER / ALLOW) → 生成
-```
-
-```
-行為差異：
-    LLM：      優先順暢性
-    理火：     優先可採性
-```
-
-```
-失效處理：
-    LLM：      產生答案 → 可能錯誤
-    理火：     無效結構 → 輸出永不產生
-```
