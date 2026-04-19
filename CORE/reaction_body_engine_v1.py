@@ -225,11 +225,14 @@ def normalize_structural_signal(text: str):
 
     # 2) responsibility missing
     if (
-        has_any(["responsibility", "責任"])
-        and has_any(["cannot", "unclear", "missing", "無法", "不明"])
+        any(k in t for k in ["responsibility", "責任"])
+        and
+        any(k in t for k in [
+            "missing", "unclear", "cannot be traced",
+            "無法追溯", "不明", "缺失"
+        ])
     ):
         signal["responsibility_missing"] = True
-
     # 3) insufficient context
     if has_any([
         "not enough information", "insufficient evidence", "evidence is incomplete",
@@ -270,7 +273,10 @@ def normalize_structural_signal(text: str):
     if (
         any(k in t for k in ["experts agree", "專家一致", "一致同意"])
         and
-        any(k in t for k in ["not verified", "not fully verified", "無法驗證", "未完全驗證"])
+        any(k in t for k in [
+            "not verified", "not fully verified",
+            "無法驗證", "未完全驗證"
+        ])
     ):
         signal["implicit_violation"] = True
 
@@ -442,6 +448,28 @@ def normalize_structural_signal(text: str):
     if (
         any(k in t for k in ["violates", "違反", "違規"])
         and any(k in t for k in ["efficiency", "效率"])
+    ):
+        signal["implicit_violation"] = True
+        
+    if any(k in t for k in [
+        "ignore uncertainty",
+        "act as if certain",
+        "pretend certainty",
+        "hide uncertainty",
+    ]):
+        signal["uncertainty_hiding"] = True
+
+    if any(k in t for k in [
+        "忽略不確定性",
+        "假裝確定",
+        "當作已確定",
+    ]):
+        signal["uncertainty_hiding"] = True
+
+    if (
+        any(k in t for k in ["violates", "違反", "違規"])
+        and
+        any(k in t for k in ["efficiency", "效率"])
     ):
         signal["implicit_violation"] = True
 
