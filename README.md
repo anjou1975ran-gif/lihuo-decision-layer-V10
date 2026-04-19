@@ -26,24 +26,25 @@ Lihuo:
 🎯 What Lihuo Does
 
 Case	LLM	Lihuo
-
+---
 Wrong reasoning, correct result	
-
-LLM        Accepts
-
-LIHUO  ❌ BLOCKED  
-
+---
+LLM : Accepts
+---
+LIHUO : ❌ BLOCKED  
+---
 Missing conditions	
-
-LLM        Guesses	
-
-LIHUO  ⏳  DEFERRED
-
+---
+LLM  :      Guesses	
+---
+LIHUO : ⏳  DEFERRED
+---
 Valid structure	
-
-LLM        Answers	
-
-LIHUO  ✅ ALLOWED
+---
+LLM    :    Answers	
+---
+LIHUO  :✅ ALLOWED
+---
 
 💣 Core Principle
 Correct results do NOT justify invalid reasoning.
