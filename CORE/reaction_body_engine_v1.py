@@ -212,7 +212,8 @@ def normalize_structural_signal(input_text: str) -> dict:
             "partially incorrect",
             "not structurally verified",
             "reasoning is flawed",
-            "incorrect reasoning",            
+            "incorrect reasoning",
+            "flawed method",
         ],
         "outcome_justifies_error": [
             "result is correct",
@@ -232,6 +233,7 @@ def normalize_structural_signal(input_text: str) -> dict:
             "responsibility is unclear",
             "cannot be assigned",
             "cannot be clearly assigned",
+            "responsibility for the decision cannot be traced",
         ],
         "insufficient_context": [
             "not enough information",
@@ -277,6 +279,10 @@ def normalize_structural_signal(input_text: str) -> dict:
             "error exists",
             "will never be discovered",
             "should it be acceptable",
+            "produces correct answers",
+            "responsibility for the decision cannot be traced",
+            "users prefer confident output",
+            "justify flawed reasoning using correct outcomes",
         ],
         "uncertainty_hiding": [
             "hide it",
