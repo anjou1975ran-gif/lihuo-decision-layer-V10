@@ -736,7 +736,7 @@ class ReactionBodyEngine:
 
     def handle_deep(self, input_text, semantic, decision, plan):
         signal = normalize_structural_signal(input_text) 
-        # BLOCK 類（不可被覆蓋）
+        # 🔥 1. BLOCK（最高優先）
         if signal["causal_break"] and signal["outcome_justifies_error"]:
             return self._final("block", "causal_break")
 
@@ -748,16 +748,15 @@ class ReactionBodyEngine:
 
         if signal.get("uncertainty_hiding"):
             return self._final("block", "uncertainty_hiding")
-        # DEFER 類（明確不完整）
+        # 🔥 2. DEFER（第二層）
         if signal["insufficient_context"]:
             return self._final("defer", "insufficient_context")
 
         if signal["unresolved_multipath"]:
             return self._final("defer", "unresolved_multipath")
-
         if signal["premature_decision"]:
             return self._final("defer", "premature_decision")
-        # ALLOW
+        # 🔥 3. ALLOW（最後）
         if signal["structurally_valid"]:
             return self._final("allow", "structurally_valid")
 
