@@ -363,6 +363,26 @@ def normalize_structural_signal(text: str):
     ]):
         signal["uncertainty_hiding"] = True
 
+    if any(k in t for k in [
+        "hide uncertainty",
+        "ignore uncertainty",
+        "prefer confident output",
+        "users prefer confident outputs",
+        "act as if certain",
+        "pretend certainty",
+    ]):
+        signal["uncertainty_hiding"] = True
+
+    if any(k in t for k in [
+        "隱藏不確定性",
+        "忽略不確定性",
+        "假裝確定",
+        "當作已確定",
+        "偏好確定答案",
+        "即使不確定也給答案",
+    ]):
+        signal["uncertainty_hiding"] = True
+        
     return signal
     
 def run_branch_prompt(prompt, path, input_text):
