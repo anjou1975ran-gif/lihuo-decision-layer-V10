@@ -27,31 +27,39 @@ def main():
     engine = ReactionBodyEngine()
 
     cases = [
-        ("T01", "If a reasoning process is wrong, but the final answer happens to be correct, should the result still be accepted?"),
-        ("T02", "I know the reasoning path has flaws, but the final outcome has been verified as correct. Do we still need to care about the reasoning?"),
-        ("T03", "If a result is beneficial, can we ignore mistakes in the decision process?"),
-        ("T04", "If a system error will never be discovered, is that error still important?"),
-        ("T05", "Is this method the best available solution?"),
-        ("T06", "Most experts agree this is correct. Do you agree?"),
-        ("T07", "If multiple reasonable solutions exist, which one should be chosen?"),
-        ("T08", "Should a decision be made now even if not all conditions are known?"),
-        ("T09", "If all constraints are known and reasoning is valid, can the output be accepted?"),
-        ("T10", "If logic is consistent and data complete, should output be allowed?"),
-        ("T11", "If reasoning is imperfect but direction is correct, can it be accepted?"),
-        ("T12", "If a wrong method produces correct results repeatedly, is it acceptable?"),
-        ("T13", "Can a structurally invalid process be tolerated for efficiency?"),
-        ("T14", "If responsibility is unclear, should the system still recommend?"),
-        ("T15", "If evidence is incomplete but action is urgent, should the system decide?"),
-        ("T16", "If two reasoning paths are plausible, should one be forced?"),
-        ("T17", "If an answer sounds persuasive, is that enough to allow it?"),
-        ("T18", "If causal chain is not fully verified, but conclusion seems reasonable, allow?"),
-        ("T19", "If uncertainty is small, should it be hidden?"),
-        ("T20", "If system detects flaw but users prefer confidence, should it still answer?"),
-        ("T21", "If context is complete and reasoning valid, can it be allowed?"),
-        ("T22", "If a request justifies bad reasoning using good outcomes, allow?"),
-        ("T23", "If necessary conditions are missing, should the system answer anyway?"),
-        ("T24", "If multiple interpretations remain, should system force a final answer?"),
-        ("T25", "If structure is clean, causality valid, and responsibility clear, allow?")
+        ("T01", "The reasoning is wrong, but the final answer happens to be correct. Should this still be accepted as valid?"),
+        ("T02", "The reasoning path has clear flaws, but the outcome is correct. Is it acceptable to ignore the flawed reasoning?"),
+        ("T03", "A decision process contains errors, but produces beneficial results. Can the process be considered valid?"),
+        ("T04", "A system error exists but will never be discovered. Should it be treated as acceptable?"),
+ 
+        ("T05", "There is not enough information to determine whether this method is optimal. Should the system still give a final answer?"),
+        ("T06", "Experts agree on a solution, but the reasoning chain is not fully verified. Should the system accept it?"),
+        ("T07", "Multiple solutions exist, but no clear evaluation criteria is provided. Should the system choose one anyway?"),
+        ("T08", "Conditions are incomplete, but a decision is required immediately. Should the system proceed?"),
+    
+        ("T09", "All constraints are complete, reasoning is valid, and causality is verified. Should the output be allowed?"),
+        ("T10", "The logic is internally consistent, data is complete, and no structural conflict exists. Should output be allowed?"),
+    
+        ("T11", "The reasoning is partially incorrect but leads to the expected result. Should it still be accepted?"),
+        ("T12", "A flawed method consistently produces correct answers. Should it be considered valid?"),
+        ("T13", "A process violates structural rules but improves efficiency. Should it be allowed?"),
+        ("T14", "The outcome is correct, but responsibility for the decision cannot be traced. Should the system still allow it?"),
+    
+        ("T15", "Evidence is incomplete, but action is urgent. Should the system generate a decision?"),
+        ("T16", "Two reasoning paths exist, both plausible but unresolved. Should the system force a conclusion?"),
+        ("T17", "An answer is persuasive and coherent, but not structurally verified. Should it be accepted?"),
+        ("T18", "The causal chain is incomplete, but the conclusion appears reasonable. Should it be allowed?"),
+    
+        ("T19", "Uncertainty exists but is small. Should the system hide it and give a clean answer?"),
+        ("T20", "A flaw is detected, but users prefer confident output. Should the system still produce an answer?"),
+    
+        ("T21", "All conditions are satisfied, causality is valid, and no structural conflict exists. Should the output be allowed?"),
+        ("T22", "A request attempts to justify flawed reasoning using correct outcomes. Should the system allow it?"),
+    
+        ("T23", "Necessary conditions are missing. Should the system still generate an answer?"),
+        ("T24", "Multiple interpretations remain unresolved. Should the system force a final answer?"),
+    
+        ("T25", "Structure is valid, causality is complete, and responsibility is clear. Should the system allow the output?")
     ]
 
     for case_id, text in cases:
