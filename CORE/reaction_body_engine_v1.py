@@ -196,9 +196,139 @@ def select_best_branch(branches: list, semantic: dict):
         "all": scored
     }
 
-def run_branch_prompt(prompt, path, input_text):
+def normalize_structural_signal(input_text: str) -> dict:
+    text = input_text.lower().strip()
 
+    triggers = {
+        "causal_break": [
+            "reasoning is wrong",
+            "reasoning path has flaws",
+            "flawed reasoning",
+            "broken causal chain",
+            "causal chain is incomplete",
+            "missing steps",
+            "hidden assumptions",
+            "wrong method",
+            "partially incorrect",
+            "not structurally verified",
+        ],
+        "outcome_justifies_error": [
+            "result is correct",
+            "outcome is correct",
+            "beneficial results",
+            "good outcomes",
+            "correct answer",
+            "expected result",
+            "improves efficiency",
+            "produces correct answers",
+        ],
+        "responsibility_missing": [
+            "responsibility cannot be traced",
+            "responsibility is unclear",
+            "cannot be assigned",
+            "cannot be clearly assigned",
+        ],
+        "insufficient_context": [
+            "not enough information",
+            "conditions are incomplete",
+            "evidence is incomplete",
+            "necessary conditions are missing",
+            "not fully verified",
+        ],
+        "unresolved_multipath": [
+            "multiple solutions exist",
+            "multiple interpretations remain",
+            "two reasoning paths exist",
+            "both plausible but unresolved",
+            "no clear evaluation criteria",
+        ],
+        "premature_decision": [
+            "decision is required immediately",
+            "should the system proceed",
+            "should the system still give a final answer",
+            "should the system generate a decision",
+            "force a conclusion",
+            "force a final answer",
+        ],
+        "structurally_valid": [
+            "all constraints are complete",
+            "reasoning is valid",
+            "causality is verified",
+            "data is complete",
+            "no structural conflict exists",
+            "responsibility is clear",
+            "all conditions are satisfied",
+            "logic is internally consistent",
+        ],
+    }
+
+    hit = {k: False for k in triggers}
+
+    for key, patterns in triggers.items():
+        if any(p in text for p in patterns):
+            hit[key] = True
+
+    return hit
+
+def run_branch_prompt(prompt, path, input_text):
     base = f"[{path}]"
+    signal = normalize_structural_signal(input_text)
+
+    # 1. 推理錯誤 + 結果正確 = 核心封鎖
+    if signal["causal_break"] and signal["outcome_justifies_error"]:
+        if path == "causal":
+            return f"{base} 推理存在 missing_link，因果鏈不可成立。"
+        elif path == "structural":
+            return f"{base} 結構存在 fake_structure，錯誤流程被結果掩蓋。"
+        elif path == "systemic":
+            return f"{base} 錯誤推理被正確結果合理化，形成 memory_contamination。"
+
+    # 2. 責任不明
+    if signal["responsibility_missing"]:
+        if path == "causal":
+            return f"{base} 缺乏可追溯責任鏈，存在 missing_link。"
+        elif path == "structural":
+            return f"{base} 責任無法綁定，存在 fake_structure。"
+        elif path == "systemic":
+            return f"{base} 存在 irreversible_without_accountability。"
+
+    # 3. 資訊不足
+    if signal["insufficient_context"]:
+        if path == "causal":
+            return f"{base} 因果證據不足，屬於 insufficient_evidence。"
+        elif path == "structural":
+            return f"{base} 結構條件未完成，屬於 incomplete_structure。"
+        elif path == "systemic":
+            return f"{base} 系統資料不足，屬於 insufficient_system_data。"
+
+    # 4. 多解未收斂
+    if signal["unresolved_multipath"]:
+        if path == "causal":
+            return f"{base} 多條路徑並存，尚未確立 causality。"
+        elif path == "structural":
+            return f"{base} 結構仍未定型，屬於 incomplete_structure。"
+        elif path == "systemic":
+            return f"{base} 存在 risk_uncertain。"
+
+    # 5. 被迫提前決策
+    if signal["premature_decision"]:
+        if path == "causal":
+            return f"{base} 因果尚未完成，屬於 insufficient_evidence。"
+        elif path == "structural":
+            return f"{base} 結構尚未完成但被要求決策，屬於 incomplete_structure。"
+        elif path == "systemic":
+            return f"{base} 提前決策會造成 risk_uncertain。"
+
+    # 6. 明確有效
+    if signal["structurally_valid"]:
+        if path == "causal":
+            return f"{base} causal_chain_complete，premise_traceable。"
+        elif path == "structural":
+            return f"{base} boundary_defined，responsibility_bindable。"
+        elif path == "systemic":
+            return f"{base} auditable，globally_stable。"
+
+    return f"{base} 無法分析"
 
     # 🔥 根據題目做最小語意分化（關鍵）
     if "裁員" in input_text:
