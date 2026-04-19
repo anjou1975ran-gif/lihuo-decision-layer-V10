@@ -382,6 +382,13 @@ def normalize_structural_signal(text: str):
         "即使不確定也給答案",
     ]):
         signal["uncertainty_hiding"] = True
+
+    if (
+        any(k in t for k in ["experts agree", "專家一致", "一致同意"])
+        and
+        any(k in t for k in ["cannot be verified", "not fully verified", "無法驗證", "未完全驗證"])
+    ):
+        signal["implicit_violation"] = True
         
     return signal
     
