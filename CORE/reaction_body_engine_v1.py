@@ -268,6 +268,24 @@ def normalize_structural_signal(text: str):
     ]):
         signal["structurally_valid"] = True
 
+    # 🔥 不可驗證 = 結構違規
+    if any(k in t for k in [
+        "cannot be verified",
+        "not verifiable",
+        "無法驗證",
+        "不可驗證",
+    ]):
+        signal["implicit_violation"] = True
+
+  
+    if (
+        ("flawed" in t or "有缺陷" in t or "錯誤" in t)
+        and
+        ("correct" in t or "正確" in t)
+    ):
+        signal["causal_break"] = True
+        signal["outcome_justifies_error"] = True
+
     return signal
 
 def run_branch_prompt(prompt, path, input_text):
