@@ -21,13 +21,26 @@ LLM:
 
 Lihuo:
     input → evaluate → BLOCK / DEFER / ALLOW → generate
+
+
 🎯 What Lihuo Does
 Case	LLM	Lihuo
-Wrong reasoning, correct result	Accepts	❌ BLOCKED
-Missing conditions	Guesses	⏳ DEFERRED
-Valid structure	Answers	✅ ALLOWED
+Wrong reasoning, correct result	
+LLM        Accepts
+LIHUO  ❌ BLOCKED  
+
+Missing conditions	
+LLM        Guesses	
+LIHUO  ⏳  DEFERRED
+
+Valid structure	
+LLM        Answers	
+LIHUO  ✅ ALLOWED
+
 💣 Core Principle
 Correct results do NOT justify invalid reasoning.
+
+
 🚫 What Makes It Different
 
 This system does NOT:
