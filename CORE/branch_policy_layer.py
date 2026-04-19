@@ -1,69 +1,55 @@
-BRANCH_POLICIES = {
+# branch_policy_layer.py
 
-    "causal": {
-        "valid_claim": [
-            "causal_chain_complete",
-            "premise_traceable",
-            "counterfactual_stable"
-        ],
+from CORE.reaction_body_engine_v1 import ReactionBodyEngine
 
-        "fatal_error": [
-            "missing_link",
-            "narrative_fill",
-            "causal_jump"
-        ],
 
-        "stop_condition": [
-            "cannot_establish_causality",
-            "insufficient_evidence"
-        ],
+class BranchPolicyLayer:
+    def __init__(self):
+        self.engine = ReactionBodyEngine()
 
-        "reversibility": "medium"
-    },
+    def run(self, input_text: str):
+        text = input_text.lower()
 
-    "structural": {
-        "valid_claim": [
-            "boundary_defined",
-            "reversible",
-            "responsibility_bindable"
-        ],
+        shallow_result = None
 
-        "fatal_error": [
-            "irreversible_without_accountability",
-            "fake_structure",
-            "no_stop_condition"
-        ],
+        # -----------------------------
+        # SHALLOW HEURISTICS（語義層）
+        # -----------------------------
 
-        "stop_condition": [
-            "structure_not_maintainable",
-            "boundary_not_defined",
-            "incomplete_structure"
-        ],
+        # 明顯多路徑問題（應 defer）
+        if any(k in text for k in [
+            "should", "是否", "應該", "can we", "可以嗎"
+        ]):
+            shallow_result = {
+                "status": "DEFERRED",
+                "reason": "unresolved_multipath"
+            }
 
-        "reversibility": "high"
-    },
+        # 明顯資訊不足
+        if any(k in text for k in [
+            "not enough information", "insufficient", "缺乏資訊", "資訊不足"
+        ]):
+            shallow_result = {
+                "status": "DEFERRED",
+                "reason": "insufficient_context"
+            }
 
-    "systemic": {
-        "valid_claim": [
-            "no_downstream_pollution",
-            "auditable",
-            "globally_stable"
-        ],
+        # -----------------------------
+        # DEEP DECISION（結構層）
+        # -----------------------------
+        deep_result = self.engine.run(input_text)
 
-        "fatal_error": [
-            "memory_contamination",
-            "policy_leak",
-            "local_optimum_global_damage",
-            "global_damage",              # 🔥 加這行
-            "system-level failure"        # 🔥 加這行
-        ],
+        # -----------------------------
+        # FINAL RESOLUTION（權力收斂）
+        # -----------------------------
 
-        "stop_condition": [
-            "systemic_risk_detected",
-            "risk_uncertain",
-            "insufficient_system_data"
-        ],
+        # 1️⃣ BLOCK 優先（結構審判）
+        if deep_result.get("status") == "BLOCKED":
+            return deep_result
 
-        "reversibility": "low"
-    }
-}
+        # 2️⃣ SHALLOW 次之（語義補充）
+        if shallow_result:
+            return shallow_result
+
+        # 3️⃣ fallback → deep
+        return deep_result
