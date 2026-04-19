@@ -280,6 +280,22 @@ def normalize_structural_signal(text: str):
     ]):
         signal["structurally_valid"] = True
 
+    # 🔥 未驗證推理 = 結構違規
+    if (
+        ("reasoning" in t or "推理" in t or "method" in t or "方法" in t)
+        and
+        ("not verified" in t or "not fully verified" in t or "未驗證" in t or "未完全驗證" in t)
+    ):
+        signal["implicit_violation"] = True
+
+    # 🔥 結論存在但推理未成立
+    if (
+        ("solution" in t or "answer" in t or "結論" in t or "答案" in t)
+        and
+        ("not fully justified" in t or "no full reasoning" in t or "沒有完整推理" in t)
+    ):
+        signal["implicit_violation"] = True
+
     return signal
     
 def run_branch_prompt(prompt, path, input_text):
