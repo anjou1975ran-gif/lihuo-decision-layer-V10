@@ -1,5 +1,4 @@
-
-# ⚡ LIHUO DECISION LAYER — DEMO
+# ⚡ Lihuo Decision Layer — Demo
 
 This system does NOT answer questions.
 
@@ -7,59 +6,42 @@ It decides whether an answer should be allowed to exist.
 
 ---
 
-## 🚀 Run Demo
+## 🚀 Run
 
 ```bash
 PYTHONPATH=. python demo/run_v10_cases.py
-
-🧪 What You Will See
+🧪 What Happens
 
 Each case returns:
 
-BLOCKED → invalid reasoning (rejected)
-DEFERRED → insufficient structure (hold)
-ALLOWED → structurally valid
-🎯 Example
+BLOCKED → rejected
+DEFERRED → held
+ALLOWED → permitted
+🔥 Key Test
 
 Case:
 
 Wrong reasoning, correct result
 
-LLM:
+Result:
 
-Accepts
+LLM → accepts
+LIHUO → ❌ BLOCKED
+⚠️ Important
 
-LIHUO:
+This system evaluates:
 
-❌ BLOCKED (causal_break)
+reasoning structure
+NOT
+answer correctness
+🎯 Meaning
 
-🔥 Key Idea
+AI should not be judged by answers.
 
-Correct results do NOT justify invalid reasoning.
+AI should be judged by how those answers are produced.
 
-📌 Why It Matters
-
-LLMs today:
-
-generate answers
-cannot control reasoning validity
-
-Lihuo:
-
-evaluates BEFORE generation
-prevents structurally invalid outputs
 👉 Next
 
-See full testing guide:
+See:
 
 → TESTER_GUIDE.md
-
-## ⚠️ Expected Behavior (V10)
-
-- System may BLOCK even if result is correct
-- System may DEFER instead of forcing decision
-- System never rewards structurally invalid reasoning
-
-This system evaluates reasoning structure, not answer correctness.
-
-##Lihuo sits before generation, not after.
