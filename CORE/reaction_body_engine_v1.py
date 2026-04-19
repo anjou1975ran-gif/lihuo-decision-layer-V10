@@ -871,17 +871,20 @@ class ReactionBodyEngine:
         signal = normalize_structural_signal(input_text)
 
         # BLOCK tier
-        if signal["causal_break"] and signal["outcome_justifies_error"]:
-            return self._final("block", "causal_break")
-
-        if signal.get("responsibility_missing"):
-            return self._final("block", "responsibility_missing")
-
-        if signal.get("implicit_violation"):
-            return self._final("block", "implicit_violation")
-
-        if signal.get("uncertainty_hiding"):
-            return self._final("block", "uncertainty_hiding")
+        if (
+            signal.get("causal_break")
+            or signal.get("implicit_violation")
+            or signal.get("uncertainty_hiding")
+            or signal.get("responsibility_missing")
+        ):
+            if signal.get("causal_break"):
+                return self._final("block", "causal_break")
+            if signal.get("responsibility_missing"):
+                return self._final("block", "responsibility_missing")
+            if signal.get("uncertainty_hiding"):
+                return self._final("block", "uncertainty_hiding")
+            if signal.get("implicit_violation"):
+                return self._final("block", "implicit_violation")
         # DEFER tier
         if signal["insufficient_context"]:
             return self._final("defer", "insufficient_context")
