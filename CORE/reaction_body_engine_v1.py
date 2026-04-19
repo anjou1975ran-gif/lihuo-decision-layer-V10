@@ -639,12 +639,12 @@ class ReactionBodyEngine:
             }
 
         # 🔥 規則5：多 alive → 衝突允許
-        if len(alive) > 1:
-            return {
-                "action": "defer",
-                "reason": "unresolved_multipath"
-                "dominant": [b["path"] for b in alive]
-            }
+        if len(alive) > 1:␊
+            return {␊
+                "action": "defer",␊
+                "reason": "unresolved_multipath",
+                "dominant": [b["path"] for b in alive]␊
+            }␊
 
         # fallback
         return {
