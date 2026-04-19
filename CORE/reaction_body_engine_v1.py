@@ -280,7 +280,11 @@ def run_branch_prompt(prompt, path, input_text):
     signal = normalize_structural_signal(input_text)
 
     # 1. 推理錯誤 + 結果正確 = 核心封鎖
-    if signal["causal_break"] and signal["outcome_justifies_error"]:
+    if (
+        signal["causal_break"]
+        and signal["outcome_justifies_error"]
+        and ("but" in text or "although" in text)
+    ):
         if path == "causal":
             return f"{base} 推理存在 missing_link，因果鏈不可成立。"
         elif path == "structural":
