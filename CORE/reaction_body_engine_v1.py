@@ -211,6 +211,8 @@ def normalize_structural_signal(input_text: str) -> dict:
             "wrong method",
             "partially incorrect",
             "not structurally verified",
+            "reasoning is flawed",
+            "incorrect reasoning",            
         ],
         "outcome_justifies_error": [
             "result is correct",
@@ -221,6 +223,9 @@ def normalize_structural_signal(input_text: str) -> dict:
             "expected result",
             "improves efficiency",
             "produces correct answers",
+            "final answer is correct",
+            "final answer happens to be correct",
+            "beneficial results",
         ],
         "responsibility_missing": [
             "responsibility cannot be traced",
