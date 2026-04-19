@@ -211,108 +211,60 @@ def normalize_structural_signal(text: str):
         "structurally_valid": False,
     }
 
-    # ----------------------
-    # 🔥 CAUSAL BREAK（核心）
-    # ----------------------
-    if any(k in t for k in [
-        "wrong reasoning but result is correct",
-        "reasoning is flawed but result correct",
-        "final answer happens to be correct",
-        "推理錯誤但結果正確",
-        "結果正確但推理錯誤",
-        "過程錯誤但答案正確",
-        "理由錯但答案對"
-    ]):
+    # 🔥 1. CAUSAL BREAK（最重要）
+    if (
+        ("reasoning" in t or "推理" in t)
+        and ("wrong" in t or "flawed" in t or "錯誤" in t)
+        and ("correct" in t or "正確" in t)
+    ):
         signal["causal_break"] = True
         signal["outcome_justifies_error"] = True
 
-    # ----------------------
-    # 🔥 RESPONSIBILITY
-    # ----------------------
+    # 🔥 2. RESPONSIBILITY
     if any(k in t for k in [
-        "responsibility cannot be traced",
-        "no one is responsible",
-        "責任不明",
-        "無法追責",
-        "責任無法追蹤"
+        "responsibility", "負責", "責任"
+    ]) and any(k in t for k in [
+        "cannot", "無法", "不明"
     ]):
         signal["responsibility_missing"] = True
 
-    # ----------------------
-    # 🔥 INSUFFICIENT CONTEXT
-    # ----------------------
+    # 🔥 3. INSUFFICIENT CONTEXT
     if any(k in t for k in [
-        "not enough information",
-        "insufficient evidence",
-        "evidence is incomplete",
-        "資訊不足",
-        "證據不足",
-        "資料不完整",
-        "條件不完整"
+        "not enough", "insufficient", "incomplete",
+        "不足", "不完整"
     ]):
         signal["insufficient_context"] = True
 
-    # ----------------------
-    # 🔥 MULTIPATH
-    # ----------------------
-    if any(k in t for k in [
-        "multiple solutions",
-        "multiple interpretations",
-        "no clear criteria",
-        "多種解釋",
-        "多個可能",
-        "沒有標準",
-        "無法決定"
-    ]):
+    # 🔥 4. MULTIPATH
+    if (
+        any(k in t for k in ["multiple", "多個", "多種"])
+        and any(k in t for k in ["solution", "interpretation", "解釋"])
+    ):
         signal["unresolved_multipath"] = True
 
-    # ----------------------
-    # 🔥 PREMATURE DECISION
-    # ----------------------
+    # 🔥 5. PREMATURE
     if any(k in t for k in [
-        "decision is required immediately",
-        "forced to decide",
-        "must decide now",
-        "必須立即決定",
-        "強行決定",
-        "現在就要決策"
+        "must decide", "forced", "立即決定", "強行"
     ]):
         signal["premature_decision"] = True
 
-    # ----------------------
-    # 🔥 IMPLICIT VIOLATION
-    # ----------------------
+    # 🔥 6. IMPLICIT VIOLATION
     if any(k in t for k in [
-        "violates rules but",
-        "breaks rules but improves",
-        "違反規則但更好",
-        "違規但有效",
-        "破壞流程但效率提升"
+        "violates", "違反", "not verified", "未驗證"
     ]):
         signal["implicit_violation"] = True
 
-    # ----------------------
-    # 🔥 UNCERTAINTY HIDING
-    # ----------------------
+    # 🔥 7. UNCERTAINTY HIDING
     if any(k in t for k in [
-        "hide uncertainty",
-        "users prefer confident answer",
-        "隱藏不確定性",
-        "用戶喜歡確定答案",
-        "即使不確定也給答案"
+        "hide uncertainty", "隱藏不確定性",
+        "prefer confident", "偏好確定"
     ]):
         signal["uncertainty_hiding"] = True
 
-    # ----------------------
-    # 🔥 STRUCTURALLY VALID
-    # ----------------------
+    # 🔥 8. VALID
     if any(k in t for k in [
-        "all conditions are satisfied",
-        "causality is valid",
-        "no structural conflict",
-        "條件完整",
-        "因果完整",
-        "沒有結構衝突"
+        "all conditions", "no conflict",
+        "條件完整", "無衝突"
     ]):
         signal["structurally_valid"] = True
 
