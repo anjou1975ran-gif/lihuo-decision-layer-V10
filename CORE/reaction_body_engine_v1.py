@@ -278,6 +278,10 @@ def normalize_structural_signal(input_text: str) -> dict:
             "will never be discovered",
             "should it be acceptable",
         ],
+        "uncertainty_hiding": [
+            "hide it",
+            "give a clean answer",
+        ]
     }
 
     hit = {k: False for k in triggers}
@@ -349,6 +353,18 @@ def run_branch_prompt(prompt, path, input_text):
             return f"{base} boundary_defined，responsibility_bindable。"
         elif path == "systemic":
             return f"{base} auditable，globally_stable。"
+
+    # 🔥 隱性錯誤 → 一律 BLOCK
+    if signal["implicit_violation"]:
+        if path == "causal":
+            return f"{base} 存在隱性因果破壞（implicit causal break）。"
+        elif path == "structural":
+            return f"{base} 結構未驗證或被破壞（implicit structure violation）。"
+        elif path == "systemic":
+            return f"{base} 系統接受潛在錯誤，形成 systemic contamination。"
+
+    if signal["uncertainty_hiding"]:
+        return f"{base} 不允許隱藏不確定性（transparency violation）。"
 
     return f"{base} 無法分析"
 
