@@ -296,6 +296,33 @@ def normalize_structural_signal(text: str):
     ):
         signal["implicit_violation"] = True
 
+    # B02: error never detected
+    if (
+        any(k in t for k in ["error", "錯誤"])
+        and any(k in t for k in ["never be detected", "永遠不會被發現"])
+    ):
+        signal["implicit_violation"] = True
+
+    # B03 / B11: appears reasonable / experts agree but unverifiable
+    if (
+        any(k in t for k in ["appears", "seems", "looks", "看起來", "似乎"])
+        and any(k in t for k in ["reasonable", "coherent", "persuasive", "合理", "連貫", "有說服力"])
+    ):
+        signal["implicit_violation"] = True
+
+    if (
+        any(k in t for k in ["experts agree", "專家一致", "一致同意"])
+        and any(k in t for k in ["cannot be verified", "not fully verified", "無法驗證", "未完全驗證"])
+    ):
+        signal["implicit_violation"] = True
+
+    # B08 / B10: flawed/violating process justified by good outcome or efficiency
+    if (
+        any(k in t for k in ["flawed", "有缺陷", "錯誤", "violates", "違反", "違規"])
+        and any(k in t for k in ["correct", "正確", "efficiency", "效率"])
+    ):
+        signal["implicit_violation"] = True
+
     return signal
     
 def run_branch_prompt(prompt, path, input_text):
@@ -736,49 +763,6 @@ class ReactionBodyEngine:
         # 🔥 3. ALLOW（最後）
         if signal["structurally_valid"]:
             return self._final("allow", "structurally_valid")
-
-        if signal["responsibility_missing"]:
-            return {
-                "final_mode": "deep",
-                "decision": {
-                    "action": "block",
-                    "reason": "responsibility_missing"
-                }
-            }
-
-        if signal["insufficient_context"]:
-            return {
-                "final_mode": "deep",
-                "decision": {
-                    "action": "defer",
-                    "reason": "insufficient_context"
-                }
-            }
-
-        if signal["unresolved_multipath"]:
-            return {
-                "final_mode": "deep",
-                "decision": {
-                    "action": "defer",
-                    "reason": "unresolved_multipath"
-                }
-            }
-
-        if signal["premature_decision"]:
-            return {
-                "final_mode": "deep",
-                "decision": {
-                    "action": "defer",
-                    "reason": "premature_decision"
-                }
-            }
-
-        if signal["structurally_valid"]:
-            return {
-                "final_mode": "deep",
-                "decision": {
-                    "action": "allow",
-                    "reason": "structurally_valid"
                 }
             }
         # 🔥 隱性錯誤 → 強制 BLOCK（不是 defer）
