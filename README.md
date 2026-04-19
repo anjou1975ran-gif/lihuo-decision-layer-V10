@@ -1,6 +1,6 @@
 Lihuo Decision Layer (V10)
-AI today answers questions.
 
+AI today answers questions.
 Lihuo decides whether an answer should exist.
 
 ⚠️ The Problem
