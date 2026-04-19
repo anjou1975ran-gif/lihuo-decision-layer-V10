@@ -1,3 +1,46 @@
+
+# 🔍 What You Are Testing
+
+You are NOT testing whether the AI gives good answers.
+
+You are testing whether:
+
+> The system refuses to produce invalid outputs.
+
+---
+
+## Expected Behavior
+
+When given structurally invalid input:
+
+- LLM → still produces an answer  
+- Lihuo → BLOCKS the output  
+
+---
+
+## Key Observation
+
+If the system works correctly:
+
+Some answers should never appear.
+
+## Critical Check
+
+If you see:
+
+- incorrect reasoning being allowed
+- answers produced under insufficient conditions
+
+→ The system has failed
+
+If you see:
+
+- outputs being blocked or deferred
+
+→ The system is working as designed
+
+
+
 ---
 
 # 🧠 這是什麼？
