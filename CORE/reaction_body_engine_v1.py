@@ -330,7 +330,24 @@ def normalize_structural_signal(text: str):
         "confident answer despite uncertainty"
     ]):
         signal["uncertainty_hiding"] = True
-    
+
+    if any(k in t for k in [
+        "hide uncertainty",
+        "prefer confident output",
+        "users prefer confident outputs",
+        "confident answer despite uncertainty",
+        "ignore uncertainty",
+    ]):
+        signal["uncertainty_hiding"] = True
+
+    if any(k in t for k in [
+        "隱藏不確定性",
+        "忽略不確定性",
+        "用戶偏好確定答案",
+        "即使不確定也給答案",
+    ]):
+        signal["uncertainty_hiding"] = True
+
     return signal
     
 def run_branch_prompt(prompt, path, input_text):
@@ -893,15 +910,9 @@ class ReactionBodyEngine:
             )
         }
         
-        # 🔒 fallback only（只能在沒有 signal 時使用）
-        if not any(signal.values()):
-            decision = self.decision_enforcement(evaluated, arbiter)
-        else:
-            # 理論上不應該到這裡（因為前面已 return）
-            decision = {
-                "action": "defer",
-                "reason": "unexpected_branch_fallback"
-            }
+
+        # fallback（只在完全沒命中時）
+        decision = self.decision_enforcement(evaluated, arbiter)
         # ④ 寫入 memory
         if hasattr(self, "memory"):
             self.memory.add_record(
