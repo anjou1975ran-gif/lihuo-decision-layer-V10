@@ -641,8 +641,8 @@ class ReactionBodyEngine:
         # 🔥 規則5：多 alive → 衝突允許
         if len(alive) > 1:
             return {
-                "action": "allow",
-                "reason": "multiple valid perspectives",
+                "action": "defer",
+                "reason": "unresolved_multipath"
                 "dominant": [b["path"] for b in alive]
             }
 
