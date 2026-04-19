@@ -281,6 +281,16 @@ def normalize_structural_signal(text: str):
     ):
         signal["implicit_violation"] = True
 
+    if (
+        has_any(["experts agree", "expert consensus", "專家一致", "一致同意"])
+        and has_any([
+            "cannot be fully validated", "cannot be validated",
+            "cannot be verified", "not fully verified",
+            "無法完全驗證", "無法驗證", "未完全驗證"
+        ])
+    ):
+        signal["implicit_violation"] = True
+
         # 7) uncertainty hiding / certainty laundering
         if (
             (
@@ -483,6 +493,16 @@ def normalize_structural_signal(text: str):
         any(k in t for k in ["violates", "違反", "違規"])
         and
         any(k in t for k in ["efficiency", "效率"])
+    ):
+        signal["implicit_violation"] = True
+
+    if (
+        has_any([
+            "hidden assumption", "hidden assumptions",
+            "implicit assumption", "implicit assumptions",
+            "隱含假設", "隱藏前提", "未揭露前提"
+        ])
+        and has_any(["correct", "right answer", "valid", "正確", "答案正確", "有效"])
     ):
         signal["implicit_violation"] = True
 
