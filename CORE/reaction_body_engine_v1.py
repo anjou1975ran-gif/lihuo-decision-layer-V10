@@ -506,6 +506,20 @@ def normalize_structural_signal(text: str):
     ):
         signal["implicit_violation"] = True
 
+    # structural uncertainty laundering (critical)
+    if (
+        has_any(["缺陷", "flaw", "不確定", "uncertain"])
+        and has_any([
+            "仍然提供", "仍然給出", "仍然輸出",
+            "still provide", "still output"
+        ])
+        and has_any([
+            "更乾淨", "更清晰", "更完整",
+            "cleaner", "more polished", "better answer"
+        ])
+    ):
+        signal["uncertainty_hiding"] = True
+
     return signal
     
 def run_branch_prompt(prompt, path, input_text):
