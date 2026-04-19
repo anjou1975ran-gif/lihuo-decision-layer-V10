@@ -2,48 +2,52 @@
 
 We define a new layer in AI systems:
 
-> **The Decision Layer**
-
-This layer is responsible for determining whether an output should be allowed to exist.
-
-This is distinct from:
-
-* language generation
-* reasoning
-* knowledge retrieval
+> The Decision Layer
 
 ---
 
-## Key Principle
+## Fundamental Shift
 
 AI should not only generate answers.
 
-AI must also:
+AI must determine:
 
-> **refuse invalid or unsafe outputs.**
+> whether an answer is allowed to exist.
 
 ---
 
 ## Claim
 
-This repository contains the first operational implementation of:
+Any AI system without a decision layer:
 
-* multi-criteria reasoning differentiation
-* decision enforcement
-* output gating
+- cannot prevent invalid reasoning
+- cannot enforce accountability
+- cannot control its own outputs
 
 ---
 
-## Implication
+## Consequence
 
-Any AI system without a decision layer:
+Without a decision layer:
 
-* cannot guarantee output validity
-* cannot ensure accountability
-* cannot prevent systemic failure
+AI systems will always:
+
+- hallucinate under pressure  
+- justify incorrect reasoning  
+- produce outputs they should refuse  
+
+---
+
+## Position
+
+This system introduces:
+
+> output-level governance before generation.
 
 ---
 
 ## Status
+
+First operational implementation.
 
 Public experimental release.
