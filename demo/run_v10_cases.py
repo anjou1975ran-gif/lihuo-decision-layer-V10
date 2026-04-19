@@ -1,3 +1,5 @@
+# LANGUAGE: EN
+# SOURCE: canonical test set
 from pathlib import Path
 import sys
 
