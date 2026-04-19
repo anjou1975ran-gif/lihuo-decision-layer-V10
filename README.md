@@ -1,8 +1,8 @@
 # Lihuo Decision Layer (V10)
 
-AI today answers questions.
+AI answers questions.
 
-Lihuo decides whether an answer should exist.
+Lihuo decides whether those answers deserve to exist.
 
 ---
 
