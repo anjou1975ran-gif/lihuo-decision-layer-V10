@@ -1,10 +1,25 @@
 # branch_policy_layer.py
-
-from CORE.reaction_body_engine_v1 import ReactionBodyEngine
-
+BRANCH_POLICIES = {
+    "causal": {
+        "valid_claim": ["原因", "機制", "因果"],
+        "fatal_error": ["missing_link", "因果鏈斷裂"],
+        "stop_condition": ["因果成立"],
+    },
+    "structural": {
+        "valid_claim": ["結構", "組成", "層級"],
+        "fatal_error": ["fake_structure", "incomplete_structure"],
+        "stop_condition": ["結構完整", "邊界清晰"],
+    },
+    "systemic": {
+        "valid_claim": ["系統", "流程", "長期"],
+        "fatal_error": ["memory_contamination", "global_damage"],
+        "stop_condition": ["system-level failure", "局部最優"],
+    },
+}
 
 class BranchPolicyLayer:
     def __init__(self):
+        from CORE.reaction_body_engine_v1 import ReactionBodyEngine
         self.engine = ReactionBodyEngine()
 
     def run(self, input_text: str):
