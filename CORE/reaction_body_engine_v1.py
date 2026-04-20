@@ -21,11 +21,23 @@ from CORE.failure_detector_v1 import failure_detector_v1
 from CORE.reaction_body_engine_v1 import ReactionBodyEngine
 from CORE.output_module import format_output
 
+# 初始化（只做一次）
 engine = ReactionBodyEngine()
-
-llm_generated_text = call_llm(user_input)
-
-decision = engine.run(user_input)
+# 每次請求
+def handle_request(user_input):
+    # 1️⃣ LLM 生成
+    llm_generated_text = call_llm(user_input)
+    # 2️⃣ 理火判斷（用答案判斷）
+    decision = engine.run(
+        input_text=user_input,
+        llm_output=llm_generated_text
+    )
+    # 3️⃣ 最終輸出（你新加的）
+    final_output = format_output(
+        decision=decision,
+        llm_output=llm_generated_text
+    )
+    return final_output
 
 def build_branch_prompt(input_text: str, path: str):
     if path == "causal":
@@ -1074,9 +1086,4 @@ class ReactionBodyEngine:
             }
         }
     
-        final_output = format_output(
-            decision=decision,
-            llm_output=llm_generated_text
-        )
-
-        return final_output
+      
