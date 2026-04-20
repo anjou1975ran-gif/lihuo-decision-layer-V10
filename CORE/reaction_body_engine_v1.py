@@ -619,7 +619,7 @@ class ReactionBodyEngine:
             self.llm = None
 
     # ---------- PUBLIC ----------
-    def run(self, user_input: str):
+    def run(self, user_input, llm_output: str):
         pending_state = resolve_pending(self.state, user_input)
 
         # ---------- Semantic ----------
@@ -745,7 +745,10 @@ class ReactionBodyEngine:
 
     # ---------- Layers ----------
     def semantic(self, user_input):
-        semantic = semantic_engine_v2(user_input)
+        semantic = semantic_engine_v2({
+            "input": user_input,
+            "output": llm_output
+        })
 
         memory_hint = self.memory.get_hint(semantic)
         semantic["memory_hint"] = memory_hint["hint"]
